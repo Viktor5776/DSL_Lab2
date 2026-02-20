@@ -118,3 +118,24 @@ cTri c = (c,zero,zero)
 --Should return (1,0,0) for every x we pass in
 testTrigIdentity :: Transcendental a => Tri a -> Tri a 
 testTrigIdentity x = sin x * sin x + cos x * cos x
+
+
+--Part 1c
+evalDD :: Transcendental a => FunExp -> FunTri a
+evalDD (Const alpha)  =  const (cTri (fromRational (toRational alpha )))
+evalDD X              =  xTri 
+evalDD (e1 :+: e2)    =  evalDD e1 + evalDD e2
+evalDD (e1 :*: e2)    =  evalDD e1 * evalDD e2
+evalDD (Recip e)      =  recip (evalDD e)
+evalDD (Negate e)     =  negate (evalDD e)
+evalDD (Exp e)        =  exp (evalDD e)     
+evalDD (Sin e)        =  sin (evalDD e)
+evalDD (Cos e)        =  cos (evalDD e)
+
+{-
+d)
+
+H2(evalDD, :*:, *) = \forall e1. \forall e2. evalDD (e1 :*: e2) == evalDD e1 * evalDD e2
+
+is this not just true from the definition?
+-}
