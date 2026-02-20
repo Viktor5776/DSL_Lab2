@@ -1,0 +1,52 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{listings}
+
+\begin{document}
+
+The evaluation of the second deriviative is given by: $eval''(x) =
+	derive \circ derive \circ eval (x)$.
+
+Where $eval : FunExp \rightarrow FunSem $ and $derive : FunExp \rightarrow FunExp$. As a reminder,
+the $FunExp$ type has the following definition:
+\begin{lstlisting}
+  data FunExp = Const REAL
+              | X
+              | FunExp :+: FunExp
+              | FunExp :*: FunExp
+              | Recip FunExp
+              | Negate FunExp
+              | Exp FunExp
+              | Sin FunExp
+              | Cos FunExp
+\end{lstlisting}
+
+And \lstinline|FunSem| has the following declaration:
+
+\begin{lstlisting}
+  type FunSem = REAL -> REAL
+\end{lstlisting}
+
+Consider the predicate:
+\\
+$P(h) = $\textit{"$h$ is a homomorphism from FunExp to FunSem"}
+
+Or more formally, given the definition for \lstinline|FunExp| and \lstinline|FunSem|:
+
+\[P (h) = H_{1}(h,\ Const,\ const)\]
+\[\wedge\ H_{0}(h,\ X,\ id)\]
+\[\wedge\ H_{2}(h,\ \text{:+:},\ +)\]
+\[\wedge\ H_{2}(h,\ \text{:*:},\ *)\]
+\[\wedge\ H_{1}(h,\ Recip,\ \lambda x.x^{-1})\]
+\[\wedge\ H_{1}(h,\ Negate,\ \lambda x.-x)\]
+\[\wedge\ H_{1}(h,\ Exp,\ \lambda x.e^{x})\]
+\[\wedge\ H_{1}(h,\ Sin,\ sin)\]
+\[\wedge\ H_{1}(h,\ Cos,\ cos)\]
+
+Here the formal defintion for $H_{n \in \mathbf{N}}$ is assumed to be known as the
+homomorphism predicate for operators of degree $n$.
+
+\end{document}
+
