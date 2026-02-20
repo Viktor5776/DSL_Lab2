@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+mkdir -p out
+pdflatex -output-dir=out LaTeX/part1.tex
