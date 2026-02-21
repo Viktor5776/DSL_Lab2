@@ -139,3 +139,43 @@ H2(evalDD, :*:, *) = \forall e1. \forall e2. evalDD (e1 :*: e2) == evalDD e1 * e
 
 is this not just true from the definition?
 -}
+
+
+--Part 2
+newtonTri :: (Tri REAL -> Tri REAL) -> REAL -> REAL -> REAL
+newtonTri f e x = last (newtonTriList f e x)
+
+newtonTriList :: (Tri REAL -> Tri REAL) -> REAL -> REAL -> [REAL]
+newtonTriList f e x 
+  | abs fx < e = [x]
+  | fx' /= 0   = x : newtonTriList f e next
+  | otherwise  = x : newtonTriList f e (x+e)
+  where
+    (fx,fx',_) = f $ xTri x
+    next = x - (fx/fx')
+
+test0 x = x^2
+test1 x = x^2 - one
+test2 x = sin x
+test3 n x y = y^n - cTri x
+
+--Part 3
+data Result a = Maximum a
+              | Minimum a
+              | Dunno a
+              deriving(Show)
+
+derivFun :: (Tri REAL -> Tri REAL) -> (Tri REAL -> Tri REAL)
+derivFun f (x,_,_) = (fx', fx'', zero)  --Thrid derivitive not available (and not needed for newton) so we use 0
+  where 
+    (_, fx', fx'') = f (x, one, zero)
+
+optim :: (Tri REAL -> Tri REAL) -> REAL -> REAL -> Result REAL
+optim f e x
+  | fxx < 0 = Maximum root
+  | fxx > 0 = Minimum root
+  | otherwise   = Dunno root
+  where
+    (_,_,fxx) = f $ xTri root
+    root = newtonTri (derivFun f) e x
+
